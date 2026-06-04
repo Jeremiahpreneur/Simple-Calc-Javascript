@@ -11,14 +11,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #000000;
-            margin: 1;
+            background-color: #0000ff;
+            margin: 0;
         }
 
         .calculator {
-            background-color: #0000ff;
+            background-color: #222;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 5px;
             box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
             width: 460px;
         }
@@ -32,12 +32,14 @@
             border-radius: 5px;
             margin-bottom: 15px;
             overflow-x: auto;
+            /* Added a minimum height so the box doesn't collapse when empty */
+            min-height: 38px; 
         }
 
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
+            gap: 10px;
         }
 
         button {
@@ -50,109 +52,57 @@
             transition: 0.2s;
         }
 
-        button:hover {
-            background-color: #ccc;
-        }
+        button:hover { background-color: #ccc; }
 
         .operator {
-            background-color: #34cb41;
-            color: rgb(255, 255, 255);
+            background-color: #ff9900;
+            color: white;
         }
 
-        .operator:hover {
-            background-color: #34cb41;
-        }
-
-        .zero {
-            grid-column: span 2;
-        }
+        .operator:hover { background-color: #ffff0021; }
+        .zero { grid-column: span 2; }
 
         .equal {
             grid-column: 4;
             grid-row: 3 / 5; 
-            background-color: #28a745;
+            background-color: #ff9900;
         }
-
-        .equal:hover {
-            background-color: #218838;
-        }
+        .equal:hover { background-color: #2188370e; }
     </style>
 </head>
 <body>
-    
-    <div class="calculator">
-        <div class="display" id="display">0</div>
-    
-        <div class="buttons">
-        <button onclick="clearDisplay()" class="operator">C</button>
-        <button onclick="appendValue('/')" class="operator">/</button>
-        <button onclick="appendValue('*')" class="operator">*</button>
-        <button onclick="appendValue('-')" class="operator">-</button>
+
+<div class="calculator">
+    <div class="display" id="display"></div>
+
+    <div class="buttons">
         
-        <button onclick="appendValue('7')">7</button>
-        <button onclick="appendValue('8')">8</button>
-        <button onclick="appendValue('9')">9</button>
-        <button onclick="appendValue('+')" class="operator">+</button>
+        <button onclick="document.getElementById('display').innerText = ''" class="operator">C</button>
         
-        <button onclick="appendValue('4')">4</button>
-        <button onclick="appendValue('5')">5</button>
-        <button onclick="appendValue('6')">6</button>
-        <button onclick="calculate()" class="operator equal" rowspan="2">=</button>
+        <button onclick="document.getElementById('display').innerText += '/'" class="operator">/</button>
+        <button onclick="document.getElementById('display').innerText += '*'" class="operator">*</button>
+        <button onclick="document.getElementById('display').innerText += '-'" class="operator">-</button>
         
-        <button onclick="appendValue('1')">1</button>
-        <button onclick="appendValue('2')">2</button>
-        <button onclick="appendValue('3')">3</button>
+        <button onclick="document.getElementById('display').innerText += '7'">7</button>
+        <button onclick="document.getElementById('display').innerText += '8'">8</button>
+        <button onclick="document.getElementById('display').innerText += '9'">9</button>
         
-        <button onclick="appendValue('0')" class="zero">0</button>
-        <button onclick="appendValue('.')">.</button>
+        <button onclick="document.getElementById('display').innerText += '+'" class="operator">+</button>
+        
+        <button onclick="document.getElementById('display').innerText += '4'">4</button>
+        <button onclick="document.getElementById('display').innerText += '5'">5</button>
+        <button onclick="document.getElementById('display').innerText += '6'">6</button>
+        
+        <button onclick="try { document.getElementById('display').innerText = eval(document.getElementById('display').innerText); } catch(error) { document.getElementById('display').innerText = 'Error'; }" class="operator equal" rowspan="2">=</button>
+        
+        <button onclick="document.getElementById('display').innerText += '1'">1</button>
+        <button onclick="document.getElementById('display').innerText += '2'">2</button>
+        <button onclick="document.getElementById('display').innerText += '3'">3</button>
+        
+        <button onclick="document.getElementById('display').innerText += '0'" class="zero">0</button>
+        <button onclick="document.getElementById('display').innerText += '.'">.</button>
     </div>
 </div>
-
-<script>
-    const display = document.getElementById('display');
-    let currentInput = '';
-
-    function appendValue(value) {
-        if (value === '.' && currentInput.includes('.')) {
-            if(currentInput.split(/[\+\-\*\/]/).pop().includes('.')) return; 
-        }
-        currentInput += value;
-        updateDisplay();
-    }
-
-    function clearDisplay() {
-        currentInput = '';
-        display.innerText = '0';
-    }
-
-    function calculate() {
-        try {
-            let result = eval(currentInput);
-            
-            if (result === Infinity || isNaN(result)) {
-                display.innerText = "Error";
-                currentInput = '';
-                return;
-            }
-
-            result = Math.round(result * 10000) / 10000;
-            currentInput = result.toString();
-            updateDisplay();
-            
-        } catch (error) {
-            display.innerText = 'Error';
-            currentInput = '';
-        }
-    }
-
-    function updateDisplay() {
-        if (currentInput === '') {
-            display.innerText = '0';
-        } else {
-            display.innerText = currentInput;
-        }
-    }
-</script>
 
 </body>
 </html>
