@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<head lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #0000ff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+            width: 260px;
+        }
+
+        .display {
+            background-color: #444;
+            color: white;
+            font-size: 2rem;
+            text-align: right;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        button {
+            background-color: #eee;
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+        .operator {
+            background-color: #34cb41;
+            color: rgb(255, 255, 255);
+        }
+
+        .operator:hover {
+            background-color: #d88e1a;
+        }
+
+        .zero {
+            grid-column: span 2;
+        }
+
+        .equal {
+            grid-column: 4;
+            grid-row: 3 / 5; 
+            background-color: #28a745;
+        }
+
+        .equal:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+    
+        <div class="buttons">
+        <button onclick="clearDisplay()" class="operator">C</button>
+        <button onclick="appendValue('/')" class="operator">/</button>
+        <button onclick="appendValue('*')" class="operator">*</button>
+        <button onclick="appendValue('-')" class="operator">-</button>
+        
+        <button onclick="appendValue('7')">7</button>
+        <button onclick="appendValue('8')">8</button>
+        <button onclick="appendValue('9')">9</button>
+        <button onclick="appendValue('+')" class="operator">+</button>
+        
+        <button onclick="appendValue('4')">4</button>
+        <button onclick="appendValue('5')">5</button>
+        <button onclick="appendValue('6')">6</button>
+        <button onclick="calculate()" class="operator equal" rowspan="2">=</button>
+        
+        <button onclick="appendValue('1')">1</button>
+        <button onclick="appendValue('2')">2</button>
+        <button onclick="appendValue('3')">3</button>
+        
+        <button onclick="appendValue('0')" class="zero">0</button>
+        <button onclick="appendValue('.')">.</button>
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById('display');
+    let currentInput = '';
+
+    function appendValue(value) {
+        if (value === '.' && currentInput.includes('.')) {
+            if(currentInput.split(/[\+\-\*\/]/).pop().includes('.')) return; 
+        }
+        currentInput += value;
+        updateDisplay();
+    }
+
+    function clearDisplay() {
+        currentInput = '';
+        display.innerText = '0';
+    }
+
+    function calculate() {
+        try {
+            let result = eval(currentInput);
+            
+            if (result === Infinity || isNaN(result)) {
+                display.innerText = "Error";
+                currentInput = '';
+                return;
+            }
+
+            result = Math.round(result * 10000) / 10000;
+            currentInput = result.toString();
+            updateDisplay();
+            
+        } catch (error) {
+            display.innerText = 'Error';
+            currentInput = '';
+        }
+    }
+
+    function updateDisplay() {
+        if (currentInput === '') {
+            display.innerText = '0';
+        } else {
+            display.innerText = currentInput;
+        }
+    }
+</script>
+
+</body>
+</html>
